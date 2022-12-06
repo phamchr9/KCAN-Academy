@@ -8,11 +8,11 @@ public class BoggleGrid {
 
     /**
      * size of grid
-     */  
+     */
     private int size;
     /**
      * characters assigned to grid
-     */      
+     */
     private char[][] board;
 
     /* BoggleGrid constructor
@@ -25,7 +25,7 @@ public class BoggleGrid {
         this.board = new char[size][size];
     }
 
-    /* 
+    /*
      * Assigns a letter in the string of letters to each grid position
      * Letters should be assigned left to right, top to bottom
      *
@@ -67,18 +67,20 @@ public class BoggleGrid {
         return this.size;
     }
 
-    /* 
+    /*
      * @return int the number of columns on the board (assumes square grid)
      */
     public int numCols() {
         return this.size;
     }
 
-    /* 
+    /*
      * @return char the character at a given grid position
      */
     public char getCharAt(int row, int col) {
         return this.board[row][col];
     }
 
+    public void takeSnapshot() {
+    }
 }

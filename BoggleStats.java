@@ -5,53 +5,53 @@ import java.util.Set;
 
 /**
  * The BoggleStats class for the first Assignment in CSC207, Fall 2022
- * The BoggleStats will contain statsitics related to game play Boggle 
+ * The BoggleStats will contain statsitics related to game play Boggle
  */
 public class BoggleStats {
 
     /**
-     * set of words the player finds in a given round 
-     */  
-    private Set<String> playerWords = new HashSet<String>();  
+     * set of words the player finds in a given round
+     */
+    private Set<String> playerWords = new HashSet<String>();
     /**
-     * set of words the computer finds in a given round 
-     */  
-    private Set<String> computerWords = new HashSet<String>();  
+     * set of words the computer finds in a given round
+     */
+    private Set<String> computerWords = new HashSet<String>();
     /**
      * the player's score for the current round
-     */  
-    private int pScore; 
+     */
+    private int pScore;
     /**
      * the computer's score for the current round
-     */  
-    private int cScore; 
+     */
+    private int cScore;
     /**
      * the player's total score across every round
-     */  
-    private int pScoreTotal; 
+     */
+    private int pScoreTotal;
     /**
      * the computer's total score across every round
-     */  
-    private int cScoreTotal; 
+     */
+    private int cScoreTotal;
     /**
      * the average number of words, per round, found by the player
-     */  
-    private double pAverageWords; 
+     */
+    private double pAverageWords;
     /**
      * the average number of words, per round, found by the computer
-     */  
-    private double cAverageWords; 
+     */
+    private double cAverageWords;
     /**
      * the current round being played
-     */  
-    private int round; 
+     */
+    private int round;
 
     /**
      * enumarable types of players (human or computer)
-     */  
+     */
     public enum Player {
-        Human("Human"),
-        Computer("Computer");
+        Player1("Player 1"),
+        Player2("Player 2");
         private final String player;
         Player(final String player) {
             this.player = player;
@@ -72,7 +72,7 @@ public class BoggleStats {
         this.pAverageWords = 0;
     }
 
-    /* 
+    /*
      * Add a word to a given player's word list for the current round.
      * You will also want to increment the player's score, as words are added.
      *
@@ -81,7 +81,7 @@ public class BoggleStats {
      */
     public void addWord(String word, Player player) {
 
-        if (player == Player.Human) {
+        if (player == Player.Player1) {
             if (!this.playerWords.contains(word)) {     // Make sure no duplicated word
                 this.playerWords.add(word);
                 this.pScore += 1 + word.length() - 4;
@@ -95,7 +95,7 @@ public class BoggleStats {
         }
     }
 
-    /* 
+    /*
      * End a given round.
      * This will clear out the human and computer word lists, so we can begin again.
      * The function will also update each player's total scores, average scores, and
@@ -127,54 +127,54 @@ public class BoggleStats {
         this.round += 1;
     }
 
-    /* 
+    /*
      * Summarize one round of boggle.  Print out:
      * The words each player found this round.
      * Each number of words each player found this round.
      * Each player's score this round.
      */
-    public void summarizeRound() {
+    public void summarizeRound(String player1Name, String player2Name) {
 
         // We want round # starts from 1
         int roundNum = this.round + 1;
         System.out.println("Summary for round: " + roundNum);
 
         //displays words Player found this round
-        System.out.println("Number of words found by Player:" + this.playerWords.size());
+        System.out.println("Number of words found by " + player1Name + ":" + this.playerWords.size());
 
         System.out.println(this.playerWords);
         System.out.println("");
 
         //displays words Computer found this round
-        System.out.println("Number of words found by Computer:" + this.computerWords.size());
+        System.out.println("Number of words found by " + player2Name + ":" + this.computerWords.size());
 
         System.out.println(this.computerWords);
         System.out.println("");
 
         //displays each player's score this round
-        System.out.println("Player scored " + this.pScore + " points this round.");
-        System.out.println("Computer scored " + this.cScore + " points this round.");
+        System.out.println(player1Name + " scored " + this.pScore + " points this round.");
+        System.out.println(player2Name + " scored " + this.cScore + " points this round.");
     }
 
-    /* 
+    /*
      * Summarize the entire boggle game.  Print out:
      * The total number of rounds played.
      * The total score for either player.
      * The average number of words found by each player per round.
      */
-    public void summarizeGame() {
+    public void summarizeGame(String player1Name, String player2Name) {
 
         System.out.println("You have played a total of " + this.round + " round(s).");
 
-        System.out.println("Player's total score: " + this.pScoreTotal);
-        System.out.println("Computer's total score: " + this.cScoreTotal);
+        System.out.println(player1Name + "'s total score: " + this.pScoreTotal);
+        System.out.println(player2Name + "'s total score: " + this.cScoreTotal);
 
-        System.out.println("Average number of words Player found per round: " + this.pAverageWords);
-        System.out.println("Average number of words Computer found per round: " + this.cAverageWords);
+        System.out.println("Average number of words " + player1Name + " found per round: " + this.pAverageWords);
+        System.out.println("Average number of words " + player2Name + " found per round: " + this.cAverageWords);
 
     }
 
-    /* 
+    /*
      * @return Set<String> The player's word list
      */
     public Set<String> getPlayerWords() {
@@ -187,8 +187,8 @@ public class BoggleStats {
     public int getRound() { return this.round; }
 
     /*
-    * @return int The current player score
-    */
+     * @return int The current player score
+     */
     public int getScore() {
         return this.pScore;
     }

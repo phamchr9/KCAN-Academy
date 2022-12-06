@@ -7,38 +7,57 @@ import java.util.*;
  */
 public class BoggleGame {
 
+    private String boardLetters;
+
+    private SinglePlayer singlePlayer;
+
+    private MultiPlayer multiPlayer;
+
+    public String player1Name;
+
+    public String player2Name;
+
+    public String choiceGamemode;
+
+    public Editor editor;
+
+    public Map<String, ArrayList<Position>> allWords;
+
+    public BoggleGrid grid;
+
     /**
      * scanner used to interact with the user via console
-     */ 
-    public Scanner scanner; 
+     */
+    public Scanner scanner;
     /**
      * stores game statistics
-     */ 
+     */
     private BoggleStats gameStats;
 
     /**
      * dice used to randomize letter assignments for a small grid
-     */ 
+     */
     private final String[] dice_small_grid= //dice specifications, for small and large grids
             {"AAEEGN", "ABBJOO", "ACHOPS", "AFFKPS", "AOOTTW", "CIMOTU", "DEILRX", "DELRVY",
                     "DISTTY", "EEGHNW", "EEINSU", "EHRTVW", "EIOSST", "ELRTTY", "HIMNQU", "HLNNRZ"};
     /**
      * dice used to randomize letter assignments for a big grid
-     */ 
+     */
     private final String[] dice_big_grid =
             {"AAAFRS", "AAEEEE", "AAFIRS", "ADENNN", "AEEEEM", "AEEGMU", "AEGMNN", "AFIRSY",
                     "BJKQXZ", "CCNSTW", "CEIILT", "CEILPT", "CEIPST", "DDLNOR", "DDHNOT", "DHHLOR",
                     "DHLNOR", "EIIITT", "EMOTTT", "ENSSSU", "FIPRSY", "GORRVW", "HIPRRY", "NOOTUW", "OOOTTU"};
 
-    /* 
+    /*
      * BoggleGame constructor
      */
     public BoggleGame() {
         this.scanner = new Scanner(System.in);
         this.gameStats = new BoggleStats();
+
     }
 
-    /* 
+    /*
      * Provide instructions to the user, so they know how to play the game.
      */
     public void giveInstructions()
@@ -55,14 +74,24 @@ public class BoggleGame {
         System.out.println("\nHit return when you're ready...");
     }
 
+    public void setGamemode() {
+        System.out.println("Enter 1 to play Single player; 2 to play Multiplayer:");
+        choiceGamemode = scanner.nextLine();
 
-    /* 
+        while(!choiceGamemode.equals("1") && !choiceGamemode.equals("2")){
+            System.out.println("Please try again.");
+            System.out.println("Enter 1 to play Single player; 2 to play Multiplayer:");
+            choiceGamemode = scanner.nextLine();
+        }
+    }
+
+
+    /*
      * Gets information from the user to initialize a new Boggle game.
      * It will loop until the user indicates they are done playing.
      */
     public void playGame(){
         int boardSize;
-        this.gameStats = new BoggleStats();
 
         while(true){
             System.out.println("Enter 1 to play on a big (5x5) grid; 2 to play on a small (4x4) one:");
@@ -91,7 +120,7 @@ public class BoggleGame {
             }
 
             if(choiceLetters.equals("1")){
-                playRound(boardSize,randomizeLetters(boardSize));
+                boardLetters = randomizeLetters(boardSize);
             } else {
                 System.out.println("Input a list of " + boardSize*boardSize + " letters:");
                 choiceLetters = scanner.nextLine();
@@ -100,11 +129,24 @@ public class BoggleGame {
                     System.out.println("Input a list of " + boardSize*boardSize + " letters:");
                     choiceLetters = scanner.nextLine();
                 }
-                playRound(boardSize,choiceLetters.toUpperCase());
+                boardLetters = choiceLetters.toUpperCase();
+            }
+
+            //start round
+            if (choiceGamemode.equals("1")) {
+                this.player1Name = "Human";
+                this.player2Name = "Computer";
+                this.singlePlayer = new SinglePlayer(this.gameStats);
+                singlePlayer.playRound(boardSize, boardLetters);
+            } else if (choiceGamemode.equals("2")) {
+                this.player1Name = "Player 1";
+                this.player2Name = "Player 2";
+                this.multiPlayer = new MultiPlayer(this.gameStats);
+                multiPlayer.playRound(boardSize, boardLetters);
             }
 
             //round is over! So, store the statistics, and end the round.
-            this.gameStats.summarizeRound();
+            this.gameStats.summarizeRound(player1Name, player2Name);
             this.gameStats.endRound();
 
             //Shall we repeat?
@@ -123,33 +165,18 @@ public class BoggleGame {
         }
 
         //we are done with the game! So, summarize all the play that has transpired and exit.
-        this.gameStats.summarizeGame();
+        this.gameStats.summarizeGame(player1Name, player2Name);
         System.out.println("Thanks for playing!");
     }
 
-    /* 
+    /*
      * Play a round of Boggle.
      * This initializes the main objects: the board, the dictionary, the map of all
      * words on the board, and the set of words found by the user. These objects are
      * passed by reference from here to many other functions.
      */
     public void playRound(int size, String letters){
-        //step 1. initialize the grid
-        BoggleGrid grid = new BoggleGrid(size);
-        grid.initalizeBoard(letters);
 
-        //step 2. initialize the dictionary of legal words
-        Dictionary boggleDict = new Dictionary("wordlist.txt"); //you may have to change the path to the wordlist, depending on where you place it.
-
-        //step 3. find all legal words on the board, given the dictionary and grid arrangement.
-        Map<String, ArrayList<Position>> allWords = new HashMap<String, ArrayList<Position>>();
-        findAllWords(allWords, boggleDict, grid);
-
-        //step 4. allow the user to try to find some words on the grid
-        humanMove(grid, allWords);
-
-        //step 5. allow the computer to identify remaining words
-        computerMove(allWords);
     }
 
     /*
@@ -197,7 +224,7 @@ public class BoggleGame {
     }
 
 
-    /* 
+    /*
      * This function finds all valid words on the boggle board.
      * A valid word is from the dictionary, has at least 4 characters and can be found on the board.
      *
@@ -209,7 +236,7 @@ public class BoggleGame {
      * @param boggleDict A dictionary of legal words
      * @param boggleGrid A boggle grid, with a letter at each position on the grid
      */
-    private void findAllWords(Map<String,ArrayList<Position>> allWords, Dictionary boggleDict, BoggleGrid boggleGrid) {
+    public void findAllWords(Dictionary boggleDict, BoggleGrid boggleGrid) {
         List<String> words = boggleDict.validWords();
 
         int numRows = boggleGrid.numRows();
@@ -306,51 +333,27 @@ public class BoggleGame {
         return false;
     }
 
-    /* 
-     * Gets words from the user.  As words are input, check to see that they are valid.
-     * If yes, add the word to the player's word list (in boggleStats) and increment
-     * the player's score (in boggleStats).
-     * End the turn once the user hits return (with no word).
-     *
-     * @param board The boggle board
-     * @param allWords A mutable list of all legal words that can be found, given the boggleGrid grid letters
-     */
-    private void humanMove(BoggleGrid board, Map<String,ArrayList<Position>> allWords){
-        System.out.println("\nIt's your turn to find some words!\n");
-        String inPut;
+    public void shuffle() {
 
-        while(true) {
-            //step 1. Print the board for the user, so they can scan it for words
-            System.out.println(board.toString());
-            System.out.print("Enter a word or press the Enter key to end: ");
-
-            //step 2. Get a input (a word) from the user via the console
-            inPut = scanner.nextLine();
-            if(inPut == "") break; //end round if user inputs nothing
-
-            //step 3. Check to see if it is valid (note validity checks should be case-insensitive)
-            if (allWords.containsKey((inPut.toUpperCase()))) {
-                //step 4. If it's valid, update the player's word list and score (stored in boggleStats)
-                gameStats.addWord(inPut.toUpperCase(), BoggleStats.Player.Human);
-            }
-        }
     }
 
-    /* 
-     * Gets words from the computer.  The computer should find words that are
-     * both valid and not in the player's word list.  For each word that the computer
-     * finds, update the computer's word list and increment the
-     * computer's score (stored in boggleStats).
-     *
-     * @param allWords A mutable list of all legal words that can be found, given the boggleGrid grid letters
-     */
-    private void computerMove(Map<String,ArrayList<Position>> all_words){
-        Set<String> player_words = gameStats.getPlayerWords();
+    public void undo() {
 
-        for (String word : all_words.keySet()) {
-            if (!player_words.contains(word))
-                gameStats.addWord(word, BoggleStats.Player.Computer);
-        }
     }
+
+    public void playValid() {
+
+    }
+
+    public void playInvalid() {
+
+    }
+
+    public void updateEditor(BoggleGrid boggleGrid) {
+
+    }
+
+
+
 
 }
