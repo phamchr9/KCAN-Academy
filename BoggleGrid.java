@@ -81,4 +81,8 @@ public class BoggleGrid {
         return this.board[row][col];
     }
 
+    public void takeSnapshot() {
+
+    }
+
 }

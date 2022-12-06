@@ -10,48 +10,49 @@ import java.util.Set;
 public class BoggleStats {
 
     /**
-     * set of words the player finds in a given round 
+     * set of words Player 1 finds in a given round
      */  
-    private Set<String> playerWords = new HashSet<String>();  
+    private Set<String> player1Words = new HashSet<String>();
     /**
-     * set of words the computer finds in a given round 
+     * set of words Player 2 finds in a given round
      */  
-    private Set<String> computerWords = new HashSet<String>();  
+    private Set<String> player2Words = new HashSet<String>();
     /**
-     * the player's score for the current round
+     * Player 1's score for the current round
      */  
-    private int pScore; 
+    private int p1Score;
     /**
-     * the computer's score for the current round
+     * Player 2's score for the current round
      */  
-    private int cScore; 
+    private int p2Score;
     /**
-     * the player's total score across every round
+     * Player 1's total score across every round
      */  
-    private int pScoreTotal; 
+    private int p1ScoreTotal;
     /**
-     * the computer's total score across every round
+     * Player 2's total score across every round
      */  
-    private int cScoreTotal; 
+    private int p2ScoreTotal;
     /**
-     * the average number of words, per round, found by the player
+     * the average number of words, per round, found by Player 1
      */  
-    private double pAverageWords; 
+    private double p1AverageWords;
     /**
-     * the average number of words, per round, found by the computer
+     * the average number of words, per round, found by Player 2
      */  
-    private double cAverageWords; 
+    private double p2AverageWords;
     /**
      * the current round being played
      */  
     private int round; 
 
     /**
-     * enumarable types of players (human or computer)
+     * enumarable types of players (Player1 or Player2). Player1 is always a user.
+     * Player2 is the computer for SinglePlayer or Player2 is another user for MultiPlayer.
      */  
     public enum Player {
-        Human("Human"),
-        Computer("Computer");
+        Player1("Player 1"),
+        Player2("Player 2");
         private final String player;
         Player(final String player) {
             this.player = player;
@@ -66,10 +67,10 @@ public class BoggleStats {
     public BoggleStats() {
 
         this.round = 0;
-        this.cScoreTotal = 0;
-        this.pScoreTotal = 0;
-        this.cAverageWords = 0;
-        this.pAverageWords = 0;
+        this.p2ScoreTotal = 0;
+        this.p1ScoreTotal = 0;
+        this.p2AverageWords = 0;
+        this.p1AverageWords = 0;
     }
 
     /* 
@@ -81,16 +82,16 @@ public class BoggleStats {
      */
     public void addWord(String word, Player player) {
 
-        if (player == Player.Human) {
-            if (!this.playerWords.contains(word)) {     // Make sure no duplicated word
-                this.playerWords.add(word);
-                this.pScore += 1 + word.length() - 4;
+        if (player == Player.Player1) {
+            if (!this.player1Words.contains(word)) {     // Make sure no duplicated word
+                this.player1Words.add(word);
+                this.p1Score += 1 + word.length() - 4;
             }
         }
         else {
-            if (!this.playerWords.contains(word)) {
-                this.computerWords.add(word);
-                this.cScore += 1 + word.length() - 4;
+            if (!this.player1Words.contains(word)) {
+                this.player2Words.add(word);
+                this.p2Score += 1 + word.length() - 4;
             }
         }
     }
@@ -108,20 +109,20 @@ public class BoggleStats {
         int numRounds = this.round + 1;
 
         // Update total scores for both players
-        this.pScoreTotal += this.pScore;
-        this.cScoreTotal += this.cScore;
+        this.p1ScoreTotal += this.p1Score;
+        this.p2ScoreTotal += this.p2Score;
 
         // Update the average number of words per round
-        this.pAverageWords = (this.pAverageWords * (numRounds - 1) + this.playerWords.size()) / numRounds;
-        this.cAverageWords = (this.cAverageWords * (numRounds - 1) + this.computerWords.size()) / numRounds;
+        this.p1AverageWords = (this.p1AverageWords * (numRounds - 1) + this.player1Words.size()) / numRounds;
+        this.p2AverageWords = (this.p2AverageWords * (numRounds - 1) + this.player2Words.size()) / numRounds;
 
         //reset current scores for each player to zero
-        this.pScore = 0;
-        this.cScore = 0;
+        this.p1Score = 0;
+        this.p2Score = 0;
 
         //clears out human and computer word lists
-        this.playerWords.clear();
-        this.computerWords.clear();
+        this.player1Words.clear();
+        this.player2Words.clear();
 
         //increment current round number by 1
         this.round += 1;
@@ -132,28 +133,30 @@ public class BoggleStats {
      * The words each player found this round.
      * Each number of words each player found this round.
      * Each player's score this round.
+     * @param player1Name The name of Player 1
+     * @param player2Name The name of Player 2
      */
-    public void summarizeRound() {
+    public void summarizeRound(String player1Name, String player2Name) {
 
         // We want round # starts from 1
         int roundNum = this.round + 1;
         System.out.println("Summary for round: " + roundNum);
 
         //displays words Player found this round
-        System.out.println("Number of words found by Player:" + this.playerWords.size());
+        System.out.println("Number of words found by " + player1Name + ": " + this.player1Words.size());
 
-        System.out.println(this.playerWords);
+        System.out.println(this.player1Words);
         System.out.println("");
 
         //displays words Computer found this round
-        System.out.println("Number of words found by Computer:" + this.computerWords.size());
+        System.out.println("Number of words found by " + player2Name + ": " + this.player2Words.size());
 
-        System.out.println(this.computerWords);
+        System.out.println(this.player2Words);
         System.out.println("");
 
         //displays each player's score this round
-        System.out.println("Player scored " + this.pScore + " points this round.");
-        System.out.println("Computer scored " + this.cScore + " points this round.");
+        System.out.println(player1Name + " scored " + this.p1Score + " points this round.");
+        System.out.println(player2Name + " scored " + this.p2Score + " points this round.");
     }
 
     /* 
@@ -161,24 +164,33 @@ public class BoggleStats {
      * The total number of rounds played.
      * The total score for either player.
      * The average number of words found by each player per round.
+     * @param player1Name The name of Player 1
+     * @param player2Name The name of Player 2
      */
-    public void summarizeGame() {
+    public void summarizeGame(String player1Name, String player2Name) {
 
         System.out.println("You have played a total of " + this.round + " round(s).");
 
-        System.out.println("Player's total score: " + this.pScoreTotal);
-        System.out.println("Computer's total score: " + this.cScoreTotal);
+        System.out.println(player1Name + "'s total score: " + this.p1ScoreTotal);
+        System.out.println(player2Name + "'s total score: " + this.p2ScoreTotal);
 
-        System.out.println("Average number of words Player found per round: " + this.pAverageWords);
-        System.out.println("Average number of words Computer found per round: " + this.cAverageWords);
+        System.out.println("Average number of words " + player1Name + " found per round: " + this.p1AverageWords);
+        System.out.println("Average number of words " + player2Name + " found per round: " + this.p2AverageWords);
 
     }
 
     /* 
-     * @return Set<String> The player's word list
+     * @return Set<String> Player 1's word list
      */
-    public Set<String> getPlayerWords() {
-        return this.playerWords;
+    public Set<String> getPlayer1Words() {
+        return this.player1Words;
+    }
+
+    /*
+     * @return Set<String> Player 2's word list
+     */
+    public Set<String> getPlayer2Words() {
+        return this.player2Words;
     }
 
     /*
@@ -190,7 +202,7 @@ public class BoggleStats {
     * @return int The current player score
     */
     public int getScore() {
-        return this.pScore;
+        return this.p1Score;
     }
 
 }
