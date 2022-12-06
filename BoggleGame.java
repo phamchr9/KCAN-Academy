@@ -260,7 +260,10 @@ public class BoggleGame {
     }
 
     public void playInvalid(){
-
+        File file = new File("IncorrectSound(1).mp3");
+        String uri = file.toURI().toString();
+        AudioClip audioClip = new AudioClip(uri);
+        audioClip.play();
     }
 
     /* 
