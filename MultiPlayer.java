@@ -14,6 +14,11 @@ public class MultiPlayer extends BoggleGame{
     final private int ROUND_TIME_LIMIT = 60;
 
     /**
+     * stores whether the game is paused.
+     */
+    private boolean gameIsPaused;
+
+    /**
      * stores the task that will execute after the timer delay.
      */
     private ActionListener task;
@@ -85,6 +90,7 @@ public class MultiPlayer extends BoggleGame{
 
     public void playRound(int size, String letters){
         this.timer = new Timer(1000, task);  //initializes the timer delay
+        this.gameIsPaused = false;
 
         //step 1. initialize the grid
         this.grid = new BoggleGrid(size);
@@ -146,19 +152,28 @@ public class MultiPlayer extends BoggleGame{
 
         while(true) {
             //step 1. Print the board for the user, so they can scan it for words
-            System.out.println(this.grid.toString());
-            System.out.print("Enter a word: ");
-
+            if (!gameIsPaused) {
+                System.out.println(this.grid.toString());
+                System.out.print("Enter a word, press [P] to pause the game: ");
+            }
 
             //step 2. Get a input (a word) from the user via the console
             inPut = scanner.nextLine().toUpperCase();
 
             if(currentTurn.equals("2")) {
                 break; //end round if user inputs nothing
+            } else if (inPut.equals("P")) {  //pauses the game
+                timer.stop();
+                gameIsPaused = true;
+                System.out.println("Game paused. Press [S] to continue game.");
+            } else if (inPut.equals("S") && gameIsPaused) {  //continues the game
+                timer.start();
+                gameIsPaused = false;
+                System.out.println("Game is resumed.");
             }
 
             //step 3. Check to see if it is valid (note validity checks should be case-insensitive)
-            if (this.allWords.containsKey((inPut.toUpperCase()))) {
+            if (this.allWords.containsKey((inPut.toUpperCase())) && !gameIsPaused) {
                 //step 4. If it's valid, update the player's word list and score (stored in boggleStats)
                 gameStats.addWord(inPut.toUpperCase(), BoggleStats.Player.Player1);
             } else {
@@ -184,19 +199,28 @@ public class MultiPlayer extends BoggleGame{
 
         while(true) {
             //step 1. Print the board for the user, so they can scan it for words
-            System.out.println(this.grid.toString());
-            System.out.print("Enter a word: ");
-
+            if (!gameIsPaused) {
+                System.out.println(this.grid.toString());
+                System.out.print("Enter a word, press [P] to pause the game: ");
+            }
 
             //step 2. Get a input (a word) from the user via the console
             inPut = scanner.nextLine().toUpperCase();
 
             if(currentTurn.equals("")) {
                 break; //end round if user inputs nothing
+            } else if (inPut.equals("P")) {  //pauses the game
+                timer.stop();
+                gameIsPaused = true;
+                System.out.println("Game paused. Press [S] to continue game.");
+            } else if (inPut.equals("S") && gameIsPaused) {  //continues the game
+                timer.start();
+                gameIsPaused = false;
+                System.out.println("Game is resumed.");
             }
 
             //step 3. Check to see if it is valid (note validity checks should be case-insensitive)
-            if (this.allWords.containsKey((inPut.toUpperCase()))) {
+            if (this.allWords.containsKey((inPut.toUpperCase())) && !gameIsPaused) {
                 //step 4. If it's valid, update the player's word list and score (stored in boggleStats)
                 gameStats.addWord(inPut.toUpperCase(), BoggleStats.Player.Player2);
             } else {
