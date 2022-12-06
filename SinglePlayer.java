@@ -51,8 +51,6 @@ public class SinglePlayer extends BoggleGame{
      * the player's score (in boggleStats).
      * End the turn once the user hits return (with no word).
      *
-     * @param board The boggle board
-     * @param allWords A mutable list of all legal words that can be found, given the boggleGrid grid letters
      */
     private void humanMove(){
         System.out.println("\nIt's your turn to find some words!\n");
@@ -81,7 +79,6 @@ public class SinglePlayer extends BoggleGame{
      * finds, update the computer's word list and increment the
      * computer's score (stored in boggleStats).
      *
-     * @param allWords A mutable list of all legal words that can be found, given the boggleGrid grid letters
      */
     private void computerMove(){
         Set<String> player_words = gameStats.getPlayerWords();

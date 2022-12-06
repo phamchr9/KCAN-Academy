@@ -1,5 +1,6 @@
 package boggle;
 
+
 /**
  * The Main class for the first Assignment in CSC207, Fall 2022
  */

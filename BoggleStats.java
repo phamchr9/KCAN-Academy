@@ -132,6 +132,9 @@ public class BoggleStats {
      * The words each player found this round.
      * Each number of words each player found this round.
      * Each player's score this round.
+     *
+     * @param player1Name
+     * @param player2Name
      */
     public void summarizeRound(String player1Name, String player2Name) {
 
@@ -161,6 +164,9 @@ public class BoggleStats {
      * The total number of rounds played.
      * The total score for either player.
      * The average number of words found by each player per round.
+     *
+     * @param player1Name
+     * @param player2Name
      */
     public void summarizeGame(String player1Name, String player2Name) {
 

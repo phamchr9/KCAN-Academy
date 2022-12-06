@@ -1,6 +1,5 @@
 package boggle;
 
-
 public class Editor {
 
     public BoggleGrid grid;
