@@ -1,5 +1,13 @@
 package boggle;
 
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.application.Application;
+import javafx.scene.media.*;
+
+import java.io.File;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -83,15 +91,15 @@ public class BoggleStats {
 
         if (player == Player.Human) {
             if (!this.playerWords.contains(word)) {     // Make sure no duplicated word
+                playValid();
                 this.playerWords.add(word);
                 this.pScore += 1 + word.length() - 4;
             }
+            else {playInvalid();}
         }
-        else {
-            if (!this.playerWords.contains(word)) {
+        else if (!this.playerWords.contains(word)) {
                 this.computerWords.add(word);
                 this.cScore += 1 + word.length() - 4;
-            }
         }
     }
 
@@ -191,6 +199,14 @@ public class BoggleStats {
     */
     public int getScore() {
         return this.pScore;
+    }
+
+    public void playValid(){
+
+    }
+
+    public void playInvalid(){
+
     }
 
 }

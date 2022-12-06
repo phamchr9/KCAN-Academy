@@ -1,6 +1,20 @@
 package boggle;
 
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.application.Application;
+import javafx.scene.media.*;
+import javafx.scene.text.Text;
+import javafx.scene.text.*;
+import javafx.scene.paint.Paint;
+import java.awt.Color;
+import javafx.scene.text.Font;
+
+import java.awt.*;
+import java.io.File;
 import java.util.*;
+import java.util.List;
 
 /**
  * The BoggleGame class for the first Assignment in CSC207, Fall 2022
@@ -15,6 +29,13 @@ public class BoggleGame {
      * stores game statistics
      */ 
     private BoggleStats gameStats;
+
+    public Editor editor;
+
+    public Map<String, ArrayList<Position>> allWords;
+
+    public BoggleGrid grid;
+
 
     /**
      * dice used to randomize letter assignments for a small grid
@@ -135,23 +156,50 @@ public class BoggleGame {
      */
     public void playRound(int size, String letters){
         //step 1. initialize the grid
-        BoggleGrid grid = new BoggleGrid(size);
-        grid.initalizeBoard(letters);
+        this.grid = new BoggleGrid(size);
+        this.editor = new Editor(this.grid);
+        this.allWords = new HashMap<String, ArrayList<Position>>();
+        this.grid.initalizeBoard(letters);
+        this.grid.takeSnapshot();
+        System.out.println(this.grid.toString());
+
+        boolean satisfied = false;
+        while(!satisfied){
+            System.out.println("Press[S] to shuffle or Press[U] to undo shuffle or Press[P] to start playing [S/U/P]");
+            String shuffle = scanner.nextLine().toUpperCase();
+            if(shuffle.equals("S")){
+                shuffle();
+                System.out.println(this.grid.toString());
+            }
+            else if(shuffle.equals("P"))
+                satisfied = true;
+            else if(shuffle.equals("U")) {
+                undo();
+                System.out.println(this.grid.toString());
+            }
+            else
+                System.out.println("Invalid input, try again.");
+        }
+
 
         //step 2. initialize the dictionary of legal words
         Dictionary boggleDict = new Dictionary("wordlist.txt"); //you may have to change the path to the wordlist, depending on where you place it.
 
         //step 3. find all legal words on the board, given the dictionary and grid arrangement.
         Map<String, ArrayList<Position>> allWords = new HashMap<String, ArrayList<Position>>();
-        findAllWords(allWords, boggleDict, grid);
+        findAllWords(boggleDict, this.grid);
 
         //step 4. allow the user to try to find some words on the grid
-        humanMove(grid, allWords);
+        humanMove();
 
         //step 5. allow the computer to identify remaining words
-        computerMove(allWords);
+        computerMove();
     }
 
+    public void updateEditor(BoggleGrid boggleGrid){
+        this.editor.bogglegrid = boggleGrid;
+        this.editor.addMemento();
+    }
     /*
      * This method returns a String of letters (length 16 or 25 depending on the size of the grid).
      * There is one letter per grid position. The letters fill the grid from left to right and
@@ -159,7 +207,7 @@ public class BoggleGame {
      *
      * @return String a String of random letters (length 16 or 25 depending on the size of the grid)
      */
-    private String randomizeLetters(int size){
+    public String randomizeLetters(int size){
 
         Random rand = new Random();
         String letters = "";
@@ -196,6 +244,24 @@ public class BoggleGame {
         return letters;
     }
 
+    public void shuffle(){
+        updateEditor(this.grid);
+        Dictionary boggleDict = new Dictionary("wordlist.txt");
+
+        BoggleGrid new_grid = new BoggleGrid(this.grid.size);
+        new_grid.initalizeBoard(randomizeLetters(this.grid.size));
+
+        this.grid = new_grid;
+        this.grid.takeSnapshot();
+    }
+
+    public void undo(){
+
+    }
+
+    public void playInvalid(){
+
+    }
 
     /* 
      * This function finds all valid words on the boggle board.
@@ -209,7 +275,7 @@ public class BoggleGame {
      * @param boggleDict A dictionary of legal words
      * @param boggleGrid A boggle grid, with a letter at each position on the grid
      */
-    private void findAllWords(Map<String,ArrayList<Position>> allWords, Dictionary boggleDict, BoggleGrid boggleGrid) {
+    private void findAllWords(Dictionary boggleDict, BoggleGrid boggleGrid) {
         List<String> words = boggleDict.validWords();
 
         int numRows = boggleGrid.numRows();
@@ -222,7 +288,7 @@ public class BoggleGame {
             for (int r = 0; r < numRows; r++) {
                 for (int c = 0; c < numCols; c++) {
                     if (checkWord(w, path, r, c, boggleGrid)) {
-                        allWords.put(w, path);
+                        this.allWords.put(w, path);
                         foundWord = true;
                         break;
                     }
@@ -315,24 +381,27 @@ public class BoggleGame {
      * @param board The boggle board
      * @param allWords A mutable list of all legal words that can be found, given the boggleGrid grid letters
      */
-    private void humanMove(BoggleGrid board, Map<String,ArrayList<Position>> allWords){
+    private void humanMove(){
         System.out.println("\nIt's your turn to find some words!\n");
         String inPut;
 
         while(true) {
             //step 1. Print the board for the user, so they can scan it for words
-            System.out.println(board.toString());
+            System.out.println(this.grid.toString());
             System.out.print("Enter a word or press the Enter key to end: ");
-
+//            if(button_click is true){
+//                shuffle;
+//                button_click = false;
+//            }
             //step 2. Get a input (a word) from the user via the console
             inPut = scanner.nextLine();
             if(inPut == "") break; //end round if user inputs nothing
 
             //step 3. Check to see if it is valid (note validity checks should be case-insensitive)
-            if (allWords.containsKey((inPut.toUpperCase()))) {
+            if (this.allWords.containsKey((inPut.toUpperCase()))) {
                 //step 4. If it's valid, update the player's word list and score (stored in boggleStats)
                 gameStats.addWord(inPut.toUpperCase(), BoggleStats.Player.Human);
-            }
+            } else {playInvalid();}
         }
     }
 
@@ -344,10 +413,10 @@ public class BoggleGame {
      *
      * @param allWords A mutable list of all legal words that can be found, given the boggleGrid grid letters
      */
-    private void computerMove(Map<String,ArrayList<Position>> all_words){
+    private void computerMove(){
         Set<String> player_words = gameStats.getPlayerWords();
 
-        for (String word : all_words.keySet()) {
+        for (String word : this.allWords.keySet()) {
             if (!player_words.contains(word))
                 gameStats.addWord(word, BoggleStats.Player.Computer);
         }
