@@ -84,8 +84,8 @@ public class MultiPlayer extends BoggleGame{
      * words on the board, and the set of words found by the user. These objects are
      * passed by reference from here to many other functions.
      *
-     * @param size An integer representation of the board dimensions (4-by-4 or 5-by-5)
-     * @param letters A String representation of the board letters
+     * @param size An integer representation of the board dimensions (4 for 4-by-4 grid or 5 for 5-by-5 grid)
+     * @param letters A String representation of the board letters (length 16 or 25 depending on the size of the grid)
      */
 
     public void playRound(int size, String letters){
@@ -103,25 +103,25 @@ public class MultiPlayer extends BoggleGame{
 
         boolean satisfied = false;
 
+        //checks if the input is valid
         while(!satisfied){
             System.out.println("Press[S] to shuffle or Press[U] to undo shuffle or Press[P] to start playing [S/U/P]");
             String shuffle = scanner.nextLine().toUpperCase();
             if(shuffle.equals("S")){
                 shuffle();
                 System.out.println(this.grid.toString());
-            }
-            else if(shuffle.equals("P"))
+            } else if(shuffle.equals("P")) {
                 satisfied = true;
-            else if(shuffle.equals("U")) {
+            } else if(shuffle.equals("U")) {
                 undo();
                 System.out.println(this.grid.toString());
-            }
-            else
+            } else {
                 System.out.println("Invalid input, try again.");
+            }
         }
 
         //step 2. initialize the dictionary of legal words
-        Dictionary boggleDict = new Dictionary("wordlist.txt"); //you may have to change the path to the wordlist, depending on where you place it.
+        Dictionary boggleDict = new Dictionary("wordlist.txt");
 
         //step 3. find all legal words on the board, given the dictionary and grid arrangement.
         findAllWords(boggleDict, this.grid);
@@ -145,7 +145,7 @@ public class MultiPlayer extends BoggleGame{
 
     private void player1Move(){
 
-        timer.start();
+        timer.start();  //start the timer for Player 1's turn
 
         System.out.println("\nIt's Player 1's turn to find some words!\n");
         String inPut;
@@ -192,7 +192,7 @@ public class MultiPlayer extends BoggleGame{
 
     private void player2Move(){
 
-        timer.start();
+        timer.start();  //start the timer for Player 2's turn
 
         System.out.println("\nIt's Player 2's turn to find some words!\n");
         String inPut;
