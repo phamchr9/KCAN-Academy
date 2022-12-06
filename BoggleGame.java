@@ -256,7 +256,7 @@ public class BoggleGame {
     }
 
     public void undo(){
-
+        this.grid = this.editor.undo();
     }
 
     public void playInvalid(){
