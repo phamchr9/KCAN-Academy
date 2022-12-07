@@ -59,6 +59,10 @@ public class MultiPlayer extends BoggleGame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 timeRemaining -= 1;
+                if(timeRemaining%10 == 0){
+                    System.out.println("");
+                    System.out.println("you have " + timeRemaining + " seconds left");
+                }
 
                 if (timeRemaining == 0) {
                     timer.stop();

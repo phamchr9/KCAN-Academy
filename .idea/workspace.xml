@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="76c781f6-e58b-45dd-800f-1b35f5c7f987" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BoggleGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/BoggleGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BoggleGrid.java" beforeDir="false" afterPath="$PROJECT_DIR$/BoggleGrid.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BoggleStats.java" beforeDir="false" afterPath="$PROJECT_DIR$/BoggleStats.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MultiPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/MultiPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SinglePlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/SinglePlayer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
