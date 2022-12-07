@@ -1,7 +1,21 @@
 package boggle;
 
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.application.Application;
+import javafx.scene.media.*;
+import javafx.scene.text.Text;
+import javafx.scene.text.*;
+import javafx.scene.paint.Paint;
+import java.awt.Color;
+import javafx.scene.text.Font;
+
+import java.awt.*;
+import java.io.File;
 
 import java.util.*;
+import java.util.List;
 
 /**
  * The BoggleGame class for the first Assignment in CSC207, Fall 2022
@@ -61,6 +75,13 @@ public class BoggleGame {
      * stores game statistics
      */
     private BoggleStats gameStats;
+
+    public Editor editor;
+
+    public Map<String, ArrayList<Position>> allWords;
+
+    public BoggleGrid grid;
+
 
     /**
      * dice used to randomize letter assignments for a small grid
@@ -220,9 +241,12 @@ public class BoggleGame {
      * @param letters A String representation of the board letters (length 16 or 25 depending on the size of the grid)
      */
     public void playRound(int size, String letters){
-
     }
 
+    public void updateEditor(BoggleGrid boggleGrid){
+        this.editor.bogglegrid = boggleGrid;
+        this.editor.addMemento();
+    }
     /*
      * This method returns a String of letters (length 16 or 25 depending on the size of the grid).
      * There is one letter per grid position. The letters fill the grid from left to right and
@@ -232,7 +256,7 @@ public class BoggleGame {
      *
      * @return String a String of random letters (length 16 or 25 depending on the size of the grid)
      */
-    private String randomizeLetters(int size){
+    public String randomizeLetters(int size){
 
         Random rand = new Random();
         String letters = "";
@@ -269,6 +293,24 @@ public class BoggleGame {
         return letters;
     }
 
+    public void shuffle(){
+        updateEditor(this.grid);
+        Dictionary boggleDict = new Dictionary("wordlist.txt");
+
+        BoggleGrid new_grid = new BoggleGrid(this.grid.size);
+        new_grid.initalizeBoard(randomizeLetters(this.grid.size));
+
+        this.grid = new_grid;
+        this.grid.takeSnapshot();
+    }
+
+    public void undo(){
+        this.grid = this.editor.undo();
+    }
+
+    public void playInvalid(){
+
+    }
 
     /*
      * This function finds all valid words on the boggle board.
@@ -282,6 +324,7 @@ public class BoggleGame {
      * @param boggleDict A dictionary of legal words
      * @param boggleGrid A boggle grid, with a letter at each position on the grid
      */
+
     public void findAllWords(Dictionary boggleDict, BoggleGrid boggleGrid) {
         List<String> words = boggleDict.validWords();
 
@@ -295,7 +338,7 @@ public class BoggleGame {
             for (int r = 0; r < numRows; r++) {
                 for (int c = 0; c < numCols; c++) {
                     if (checkWord(w, path, r, c, boggleGrid)) {
-                        allWords.put(w, path);
+                        this.allWords.put(w, path);
                         foundWord = true;
                         break;
                     }
@@ -380,11 +423,18 @@ public class BoggleGame {
     }
 
     public void shuffle() {
+        updateEditor(this.grid);
+        Dictionary boggleDict = new Dictionary("wordlist.txt");
 
+        BoggleGrid new_grid = new BoggleGrid(this.grid.size);
+        new_grid.initalizeBoard(randomizeLetters(this.grid.size));
+
+        this.grid = new_grid;
+        this.grid.takeSnapshot();
     }
 
     public void undo() {
-
+        this.grid = this.editor.undo();
     }
 
     public void playValid() {

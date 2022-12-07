@@ -1,5 +1,13 @@
 package boggle;
 
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.application.Application;
+import javafx.scene.media.*;
+
+import java.io.File;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -79,19 +87,21 @@ public class BoggleStats {
      * @param word     The word to be added to the list
      * @param player  The player to whom the word was awarded
      */
-    public void addWord(String word, Player player) {
-
+    public void addWord(String word, Player player, String mode) {
         if (player == Player.Player1) {
+            playValid();
             if (!this.player1Words.contains(word)) {     // Make sure no duplicated word
                 this.player1Words.add(word);
                 this.p1Score += 1 + word.length() - 4;
             }
+            else {playInvalid();}
         }
         else {
             if (!this.player1Words.contains(word)) {
+                if(mode.contains("m"){playValid();)
                 this.player2Words.add(word);
                 this.p2Score += 1 + word.length() - 4;
-            }
+            } else {playInvalid();)
         }
     }
 
@@ -211,6 +221,14 @@ public class BoggleStats {
     public int getPlayer2Score() {
 
         return this.p2Score;
+    }
+
+    public void playValid(){
+
+    }
+
+    public void playInvalid(){
+
     }
 
 }
