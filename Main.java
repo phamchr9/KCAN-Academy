@@ -1,6 +1,5 @@
 package boggle;
 
-import boggle.BoggleGame;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -17,23 +16,13 @@ import java.util.*;
  */
 public class Main {
     /**
-    * Main method. 
-    * @param args command line arguments.
-    **/
+     * Main method.
+     * @param args command line arguments.
+     **/
     public static void main(String[] args) {
-//        String path;
-//        Platform.startup({
-//                path = "C:\\Users\\Kenaz Christian\\OneDrive\\Desktop\\University\\Courses\\CSC207\\KCAN-Academy\\CorrectSound.mp3";
-//            File file = new File(path);
-//            String uri = file.toURI().toString();
-//            Media media = new Media(uri);
-//            MediaPlayer mediaPlayer = new MediaPlayer(media);
-//            mediaPlayer.play();
-//        });
-
-
         BoggleGame b = new BoggleGame();
         b.giveInstructions();
+        b.setGamemode();
         b.playGame();
     }
 
