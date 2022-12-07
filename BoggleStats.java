@@ -54,6 +54,7 @@ public class BoggleStats {
      */  
     private int round; 
 
+    private State state;
     /**
      * enumarable types of players (human or computer)
      */  
@@ -78,6 +79,7 @@ public class BoggleStats {
         this.pScoreTotal = 0;
         this.cAverageWords = 0;
         this.pAverageWords = 0;
+        this.state = new RegularState(this);
     }
 
     /* 
@@ -87,6 +89,10 @@ public class BoggleStats {
      * @param word     The word to be added to the list
      * @param player  The player to whom the word was awarded
      */
+    public void changeState(){
+        this.pScore = this.state.point();
+        this.state = new RegularState(this);
+    }
     public void addWord(String word, Player player) {
 
         if (player == Player.Human) {
@@ -94,6 +100,12 @@ public class BoggleStats {
                 playValid();
                 this.playerWords.add(word);
                 this.pScore += 1 + word.length() - 4;
+                if(word.length() >= 6){
+                    this.state = new BonusState(this);
+                    changeState();
+                    playHooray();
+                    System.out.println("YOU GET DOUBLE POINTS!! HOOORAYYY!!");
+                }
             }
             else {playInvalid();}
         }
@@ -214,5 +226,12 @@ public class BoggleStats {
         AudioClip audioClip = new AudioClip(uri);
         audioClip.play();
     }
+    public void playHooray(){
+        File file = new File("HooraySound.mp3");
+        String uri = file.toURI().toString();
+        AudioClip audioClip = new AudioClip(uri);
+        audioClip.play();
+    }
+
 
 }

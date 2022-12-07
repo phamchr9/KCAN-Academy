@@ -21,17 +21,6 @@ public class Main {
     * @param args command line arguments.
     **/
     public static void main(String[] args) {
-//        String path;
-//        Platform.startup({
-//                path = "C:\\Users\\Kenaz Christian\\OneDrive\\Desktop\\University\\Courses\\CSC207\\KCAN-Academy\\CorrectSound.mp3";
-//            File file = new File(path);
-//            String uri = file.toURI().toString();
-//            Media media = new Media(uri);
-//            MediaPlayer mediaPlayer = new MediaPlayer(media);
-//            mediaPlayer.play();
-//        });
-
-
         BoggleGame b = new BoggleGame();
         b.giveInstructions();
         b.playGame();
