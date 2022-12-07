@@ -91,6 +91,7 @@ public class BoggleStats {
         if (player == Player.Player1) {
             playValid();
             if (!this.player1Words.contains(word)) {     // Make sure no duplicated word
+                playValid();
                 this.player1Words.add(word);
                 this.p1Score += 1 + word.length() - 4;
             }
@@ -98,10 +99,10 @@ public class BoggleStats {
         }
         else {
             if (!this.player1Words.contains(word)) {
-                if(mode.contains("m"){playValid();)
+                if(mode.contains("m"){playValid();}
                 this.player2Words.add(word);
                 this.p2Score += 1 + word.length() - 4;
-            } else {playInvalid();)
+            } else if(mode.contains("m")){playInvalid();}
         }
     }
 

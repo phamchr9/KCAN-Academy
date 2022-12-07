@@ -6,10 +6,6 @@ import javafx.scene.media.MediaPlayer;
 import javafx.application.Application;
 import javafx.scene.media.*;
 import javafx.scene.text.Text;
-import javafx.scene.text.*;
-import javafx.scene.paint.Paint;
-import java.awt.Color;
-import javafx.scene.text.Font;
 
 import java.awt.*;
 import java.io.File;
@@ -324,8 +320,8 @@ public class BoggleGame {
      * @param boggleDict A dictionary of legal words
      * @param boggleGrid A boggle grid, with a letter at each position on the grid
      */
-
     public void findAllWords(Dictionary boggleDict, BoggleGrid boggleGrid) {
+
         List<String> words = boggleDict.validWords();
 
         int numRows = boggleGrid.numRows();
@@ -422,6 +418,8 @@ public class BoggleGame {
         return false;
     }
 
+    // Shuffles bogglegrid by initilizing a new grid of the same size with new letters
+    
     public void shuffle() {
         updateEditor(this.grid);
         Dictionary boggleDict = new Dictionary("wordlist.txt");
@@ -438,6 +436,7 @@ public class BoggleGame {
     }
 
     public void playValid() {
+
 
     }
 
