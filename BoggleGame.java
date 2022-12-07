@@ -8,22 +8,49 @@ import java.util.*;
  */
 public class BoggleGame {
 
+    /**
+     * stores a string representation of the board letters.
+     */
     private String boardLetters;
 
+    /**
+     * stores the SinglePlayer object.
+     */
     private SinglePlayer singlePlayer;
 
+    /**
+     * stores the MultiPlayer object.
+     */
     private MultiPlayer multiPlayer;
 
+    /**
+     * stores the name of Player 1.
+     */
     public String player1Name;
 
+    /**
+     * stores the name of Player 2.
+     */
     public String player2Name;
 
+    /**
+     * stores string representation of the current game mode (1 for Single player; 2 for Multiplayer).
+     */
     public String choiceGamemode;
 
+    /**
+     * stores the Editor object.
+     */
     public Editor editor;
 
+    /**
+     * stores a mutable list of all the possible words that can be formed from the current board arrangement.
+     */
     public Map<String, ArrayList<Position>> allWords;
 
+    /**
+     * stores the BoggleGrid object.
+     */
     public BoggleGrid grid;
 
     /**
@@ -55,7 +82,6 @@ public class BoggleGame {
     public BoggleGame() {
         this.scanner = new Scanner(System.in);
         this.gameStats = new BoggleStats();
-
     }
 
     /*
@@ -75,10 +101,15 @@ public class BoggleGame {
         System.out.println("\nHit return when you're ready...");
     }
 
+    /*
+     * Allows the user to choose a game mode.
+     */
     public void setGamemode() {
+        //prompts user to choose a game mode
         System.out.println("Enter 1 to play Single player; 2 to play Multiplayer:");
         choiceGamemode = scanner.nextLine();
 
+        //checks if the input is valid
         while(!choiceGamemode.equals("1") && !choiceGamemode.equals("2")){
             System.out.println("Please try again.");
             System.out.println("Enter 1 to play Single player; 2 to play Multiplayer:");
@@ -95,6 +126,7 @@ public class BoggleGame {
         int boardSize;
 
         while(true){
+            //prompts user to choose a grid size
             System.out.println("Enter 1 to play on a big (5x5) grid; 2 to play on a small (4x4) one:");
             String choiceGrid = scanner.nextLine();
 
@@ -106,6 +138,7 @@ public class BoggleGame {
                 choiceGrid = scanner.nextLine();
             }
 
+            //sets the size of the grid
             if(choiceGrid.equals("1")) boardSize = 5;
             else boardSize = 4;
 
@@ -113,6 +146,7 @@ public class BoggleGame {
             System.out.println("Enter 1 to randomly assign letters to the grid; 2 to provide your own.");
             String choiceLetters = scanner.nextLine();
 
+            //checks if the input is valid
             if(choiceLetters == "") break; //end game if user inputs nothing
             while(!choiceLetters.equals("1") && !choiceLetters.equals("2")){
                 System.out.println("Please try again.");
@@ -120,11 +154,15 @@ public class BoggleGame {
                 choiceLetters = scanner.nextLine();
             }
 
+            //sets the letters for the grid
             if(choiceLetters.equals("1")){
                 boardLetters = randomizeLetters(boardSize);
             } else {
+                //prompts the user for a string representation of their choice of board letters
                 System.out.println("Input a list of " + boardSize*boardSize + " letters:");
                 choiceLetters = scanner.nextLine();
+
+                //checks if the input is valid
                 while(!(choiceLetters.length() == boardSize*boardSize)){
                     System.out.println("Sorry, bad input. Please try again.");
                     System.out.println("Input a list of " + boardSize*boardSize + " letters:");
@@ -133,7 +171,7 @@ public class BoggleGame {
                 boardLetters = choiceLetters.toUpperCase();
             }
 
-            //start round
+            //starts the round
             if (choiceGamemode.equals("1")) {
                 this.player1Name = "Human";
                 this.player2Name = "Computer";
@@ -155,6 +193,8 @@ public class BoggleGame {
             String choiceRepeat = scanner.nextLine().toUpperCase();
 
             if(choiceRepeat == "") break; //end game if user inputs nothing
+
+            //checks if the input is valid
             while(!choiceRepeat.equals("Y") && !choiceRepeat.equals("N")){
                 System.out.println("Please try again.");
                 System.out.println("Play again? Type 'Y' or 'N'");
@@ -175,6 +215,9 @@ public class BoggleGame {
      * This initializes the main objects: the board, the dictionary, the map of all
      * words on the board, and the set of words found by the user. These objects are
      * passed by reference from here to many other functions.
+     *
+     * @param size An integer representation of the board dimensions (4 for 4-by-4 grid or 5 for 5-by-5 grid)
+     * @param letters A String representation of the board letters (length 16 or 25 depending on the size of the grid)
      */
     public void playRound(int size, String letters){
 
@@ -184,6 +227,8 @@ public class BoggleGame {
      * This method returns a String of letters (length 16 or 25 depending on the size of the grid).
      * There is one letter per grid position. The letters fill the grid from left to right and
      * from top to bottom.
+     *
+     * @param size An integer representation of the board dimensions (4 for 4-by-4 grid or 5 for 5-by-5 grid)
      *
      * @return String a String of random letters (length 16 or 25 depending on the size of the grid)
      */

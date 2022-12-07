@@ -25,6 +25,9 @@ public class SinglePlayer extends BoggleGame{
      * This initializes the main objects: the board, the dictionary, the map of all
      * words on the board, and the set of words found by the user. These objects are
      * passed by reference from here to many other functions.
+     *
+     * @param size An integer representation of the board dimensions (4 for 4-by-4 grid or 5 for 5-by-5 grid)
+     * @param letters A String representation of the board letters (length 16 or 25 depending on the size of the grid)
      */
     public void playRound(int size, String letters){
         //step 1. initialize the grid
@@ -81,7 +84,7 @@ public class SinglePlayer extends BoggleGame{
      *
      */
     private void computerMove(){
-        Set<String> player_words = gameStats.getPlayerWords();
+        Set<String> player_words = gameStats.getPlayer1Words();
 
         for (String word : this.allWords.keySet()) {
             if (!player_words.contains(word))
