@@ -1,6 +1,5 @@
 package boggle;
 
-
 /**
  * The BoggleGrid class for the first Assignment in CSC207, Fall 2022
  * The BoggleGrid represents the grid on which we play Boggle 
@@ -9,12 +8,14 @@ public class BoggleGrid {
 
     /**
      * size of grid
-     */
-    private int size;
+     */  
+    public int size;
+
     /**
      * characters assigned to grid
      */
     private char[][] board;
+    public String BoardLetters;
 
     /* BoggleGrid constructor
      * ----------------------
@@ -33,7 +34,7 @@ public class BoggleGrid {
      * @param letters a string of letters, one for each grid position.
      */
     public void initalizeBoard(String letters) {
-
+        this.BoardLetters = letters;
         int lettersIndex = 0;
         for (int row = 0; row < this.size; row++) {  //loop through rows
             for (int col = 0; col < this.size; col++) {  //loop through columns
@@ -81,7 +82,42 @@ public class BoggleGrid {
     public char getCharAt(int row, int col) {
         return this.board[row][col];
     }
+    public Memento takeSnapshot(){
+        return new Memento(this);
+    }
+
+    public BoggleGrid restore(Memento memento){
+        BoggleGrid temp = memento.getSavedGrid();
+        this.size = temp.size;
+        this.board = temp.board;
+        this.BoardLetters = temp.BoardLetters;
+        this.initalizeBoard(this.BoardLetters);
+        return this;
+    }
+
+    public static class Memento{
+        public int size;
+        public char[][] board;
+        public String bogglestring;
+        public BoggleGrid boggleGrid;
+
+        private Memento(BoggleGrid bogglegridTosave) {
+            this.size = bogglegridTosave.size;
+            this.board = bogglegridTosave.board;
+            this.bogglestring = bogglegridTosave.BoardLetters;
+
+            boggleGrid = new BoggleGrid(this.size);
+            boggleGrid.initalizeBoard(this.bogglestring);
+        }
+
+        public BoggleGrid getSavedGrid(){
+            return this.boggleGrid;
+        }
+    }
+
+
 
     public void takeSnapshot() {
     }
 }
+
