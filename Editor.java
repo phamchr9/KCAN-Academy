@@ -1,11 +1,9 @@
 package boggle;
 
-
 import java.util.Deque;
 import java.util.EmptyStackException;
 import java.util.LinkedList;
 import java.util.Stack;
-
 
 public class Editor {
     public Stack<BoggleGrid.Memento> History;

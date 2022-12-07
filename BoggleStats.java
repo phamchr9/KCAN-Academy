@@ -89,6 +89,7 @@ public class BoggleStats {
      */
     public void addWord(String word, Player player, String mode) {
         if (player == Player.Player1) {
+            playValid();
             if (!this.player1Words.contains(word)) {     // Make sure no duplicated word
                 playValid();
                 this.player1Words.add(word);

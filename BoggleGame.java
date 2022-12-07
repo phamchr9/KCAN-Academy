@@ -7,11 +7,8 @@ import javafx.application.Application;
 import javafx.scene.media.*;
 import javafx.scene.text.Text;
 
-
 import java.awt.*;
 import java.io.File;
-=======
-
 
 import java.util.*;
 import java.util.List;
@@ -240,7 +237,6 @@ public class BoggleGame {
      * @param letters A String representation of the board letters (length 16 or 25 depending on the size of the grid)
      */
     public void playRound(int size, String letters){
-
     }
 
     public void updateEditor(BoggleGrid boggleGrid){
@@ -305,7 +301,7 @@ public class BoggleGame {
     }
 
     public void undo(){
-
+        this.grid = this.editor.undo();
     }
 
     public void playInvalid(){
@@ -324,7 +320,6 @@ public class BoggleGame {
      * @param boggleDict A dictionary of legal words
      * @param boggleGrid A boggle grid, with a letter at each position on the grid
      */
-     
     public void findAllWords(Dictionary boggleDict, BoggleGrid boggleGrid) {
 
         List<String> words = boggleDict.validWords();
@@ -437,7 +432,7 @@ public class BoggleGame {
     }
 
     public void undo() {
-
+        this.grid = this.editor.undo();
     }
 
     public void playValid() {

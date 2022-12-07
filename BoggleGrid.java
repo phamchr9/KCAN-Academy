@@ -8,7 +8,6 @@ public class BoggleGrid {
 
     /**
      * size of grid
-
      */  
     public int size;
 
