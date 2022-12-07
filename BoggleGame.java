@@ -13,6 +13,7 @@ import javafx.scene.text.Font;
 
 import java.awt.*;
 import java.io.File;
+
 import java.util.*;
 import java.util.List;
 
@@ -22,12 +23,57 @@ import java.util.List;
 public class BoggleGame {
 
     /**
+     * stores a string representation of the board letters.
+     */
+    private String boardLetters;
+
+    /**
+     * stores the SinglePlayer object.
+     */
+    private SinglePlayer singlePlayer;
+
+    /**
+     * stores the MultiPlayer object.
+     */
+    private MultiPlayer multiPlayer;
+
+    /**
+     * stores the name of Player 1.
+     */
+    public String player1Name;
+
+    /**
+     * stores the name of Player 2.
+     */
+    public String player2Name;
+
+    /**
+     * stores string representation of the current game mode (1 for Single player; 2 for Multiplayer).
+     */
+    public String choiceGamemode;
+
+    /**
+     * stores the Editor object.
+     */
+    public Editor editor;
+
+    /**
+     * stores a mutable list of all the possible words that can be formed from the current board arrangement.
+     */
+    public Map<String, ArrayList<Position>> allWords;
+
+    /**
+     * stores the BoggleGrid object.
+     */
+    public BoggleGrid grid;
+
+    /**
      * scanner used to interact with the user via console
-     */ 
-    public Scanner scanner; 
+     */
+    public Scanner scanner;
     /**
      * stores game statistics
-     */ 
+     */
     private BoggleStats gameStats;
 
     public Editor editor;
@@ -39,19 +85,19 @@ public class BoggleGame {
 
     /**
      * dice used to randomize letter assignments for a small grid
-     */ 
+     */
     private final String[] dice_small_grid= //dice specifications, for small and large grids
             {"AAEEGN", "ABBJOO", "ACHOPS", "AFFKPS", "AOOTTW", "CIMOTU", "DEILRX", "DELRVY",
                     "DISTTY", "EEGHNW", "EEINSU", "EHRTVW", "EIOSST", "ELRTTY", "HIMNQU", "HLNNRZ"};
     /**
      * dice used to randomize letter assignments for a big grid
-     */ 
+     */
     private final String[] dice_big_grid =
             {"AAAFRS", "AAEEEE", "AAFIRS", "ADENNN", "AEEEEM", "AEEGMU", "AEGMNN", "AFIRSY",
                     "BJKQXZ", "CCNSTW", "CEIILT", "CEILPT", "CEIPST", "DDLNOR", "DDHNOT", "DHHLOR",
                     "DHLNOR", "EIIITT", "EMOTTT", "ENSSSU", "FIPRSY", "GORRVW", "HIPRRY", "NOOTUW", "OOOTTU"};
 
-    /* 
+    /*
      * BoggleGame constructor
      */
     public BoggleGame() {
@@ -59,7 +105,7 @@ public class BoggleGame {
         this.gameStats = new BoggleStats();
     }
 
-    /* 
+    /*
      * Provide instructions to the user, so they know how to play the game.
      */
     public void giveInstructions()
@@ -76,16 +122,32 @@ public class BoggleGame {
         System.out.println("\nHit return when you're ready...");
     }
 
+    /*
+     * Allows the user to choose a game mode.
+     */
+    public void setGamemode() {
+        //prompts user to choose a game mode
+        System.out.println("Enter 1 to play Single player; 2 to play Multiplayer:");
+        choiceGamemode = scanner.nextLine();
 
-    /* 
+        //checks if the input is valid
+        while(!choiceGamemode.equals("1") && !choiceGamemode.equals("2")){
+            System.out.println("Please try again.");
+            System.out.println("Enter 1 to play Single player; 2 to play Multiplayer:");
+            choiceGamemode = scanner.nextLine();
+        }
+    }
+
+
+    /*
      * Gets information from the user to initialize a new Boggle game.
      * It will loop until the user indicates they are done playing.
      */
     public void playGame(){
         int boardSize;
-        this.gameStats = new BoggleStats();
 
         while(true){
+            //prompts user to choose a grid size
             System.out.println("Enter 1 to play on a big (5x5) grid; 2 to play on a small (4x4) one:");
             String choiceGrid = scanner.nextLine();
 
@@ -97,6 +159,7 @@ public class BoggleGame {
                 choiceGrid = scanner.nextLine();
             }
 
+            //sets the size of the grid
             if(choiceGrid.equals("1")) boardSize = 5;
             else boardSize = 4;
 
@@ -104,6 +167,7 @@ public class BoggleGame {
             System.out.println("Enter 1 to randomly assign letters to the grid; 2 to provide your own.");
             String choiceLetters = scanner.nextLine();
 
+            //checks if the input is valid
             if(choiceLetters == "") break; //end game if user inputs nothing
             while(!choiceLetters.equals("1") && !choiceLetters.equals("2")){
                 System.out.println("Please try again.");
@@ -111,21 +175,38 @@ public class BoggleGame {
                 choiceLetters = scanner.nextLine();
             }
 
+            //sets the letters for the grid
             if(choiceLetters.equals("1")){
-                playRound(boardSize,randomizeLetters(boardSize));
+                boardLetters = randomizeLetters(boardSize);
             } else {
+                //prompts the user for a string representation of their choice of board letters
                 System.out.println("Input a list of " + boardSize*boardSize + " letters:");
                 choiceLetters = scanner.nextLine();
+
+                //checks if the input is valid
                 while(!(choiceLetters.length() == boardSize*boardSize)){
                     System.out.println("Sorry, bad input. Please try again.");
                     System.out.println("Input a list of " + boardSize*boardSize + " letters:");
                     choiceLetters = scanner.nextLine();
                 }
-                playRound(boardSize,choiceLetters.toUpperCase());
+                boardLetters = choiceLetters.toUpperCase();
+            }
+
+            //starts the round
+            if (choiceGamemode.equals("1")) {
+                this.player1Name = "Human";
+                this.player2Name = "Computer";
+                this.singlePlayer = new SinglePlayer(this.gameStats);
+                singlePlayer.playRound(boardSize, boardLetters);
+            } else if (choiceGamemode.equals("2")) {
+                this.player1Name = "Player 1";
+                this.player2Name = "Player 2";
+                this.multiPlayer = new MultiPlayer(this.gameStats);
+                multiPlayer.playRound(boardSize, boardLetters);
             }
 
             //round is over! So, store the statistics, and end the round.
-            this.gameStats.summarizeRound();
+            this.gameStats.summarizeRound(player1Name, player2Name);
             this.gameStats.endRound();
 
             //Shall we repeat?
@@ -133,6 +214,8 @@ public class BoggleGame {
             String choiceRepeat = scanner.nextLine().toUpperCase();
 
             if(choiceRepeat == "") break; //end game if user inputs nothing
+
+            //checks if the input is valid
             while(!choiceRepeat.equals("Y") && !choiceRepeat.equals("N")){
                 System.out.println("Please try again.");
                 System.out.println("Play again? Type 'Y' or 'N'");
@@ -144,56 +227,20 @@ public class BoggleGame {
         }
 
         //we are done with the game! So, summarize all the play that has transpired and exit.
-        this.gameStats.summarizeGame();
+        this.gameStats.summarizeGame(player1Name, player2Name);
         System.out.println("Thanks for playing!");
     }
 
-    /* 
+    /*
      * Play a round of Boggle.
      * This initializes the main objects: the board, the dictionary, the map of all
      * words on the board, and the set of words found by the user. These objects are
      * passed by reference from here to many other functions.
+     *
+     * @param size An integer representation of the board dimensions (4 for 4-by-4 grid or 5 for 5-by-5 grid)
+     * @param letters A String representation of the board letters (length 16 or 25 depending on the size of the grid)
      */
     public void playRound(int size, String letters){
-        //step 1. initialize the grid
-        this.grid = new BoggleGrid(size);
-        this.editor = new Editor(this.grid);
-        this.allWords = new HashMap<String, ArrayList<Position>>();
-        this.grid.initalizeBoard(letters);
-        this.grid.takeSnapshot();
-        System.out.println(this.grid.toString());
-
-        boolean satisfied = false;
-        while(!satisfied){
-            System.out.println("Press[S] to shuffle or Press[U] to undo shuffle or Press[P] to start playing [S/U/P]");
-            String shuffle = scanner.nextLine().toUpperCase();
-            if(shuffle.equals("S")){
-                shuffle();
-                System.out.println(this.grid.toString());
-            }
-            else if(shuffle.equals("P"))
-                satisfied = true;
-            else if(shuffle.equals("U")) {
-                undo();
-                System.out.println(this.grid.toString());
-            }
-            else
-                System.out.println("Invalid input, try again.");
-        }
-
-
-        //step 2. initialize the dictionary of legal words
-        Dictionary boggleDict = new Dictionary("wordlist.txt"); //you may have to change the path to the wordlist, depending on where you place it.
-
-        //step 3. find all legal words on the board, given the dictionary and grid arrangement.
-        Map<String, ArrayList<Position>> allWords = new HashMap<String, ArrayList<Position>>();
-        findAllWords(boggleDict, this.grid);
-
-        //step 4. allow the user to try to find some words on the grid
-        humanMove();
-
-        //step 5. allow the computer to identify remaining words
-        computerMove();
     }
 
     public void updateEditor(BoggleGrid boggleGrid){
@@ -204,6 +251,8 @@ public class BoggleGame {
      * This method returns a String of letters (length 16 or 25 depending on the size of the grid).
      * There is one letter per grid position. The letters fill the grid from left to right and
      * from top to bottom.
+     *
+     * @param size An integer representation of the board dimensions (4 for 4-by-4 grid or 5 for 5-by-5 grid)
      *
      * @return String a String of random letters (length 16 or 25 depending on the size of the grid)
      */
@@ -263,7 +312,7 @@ public class BoggleGame {
 
     }
 
-    /* 
+    /*
      * This function finds all valid words on the boggle board.
      * A valid word is from the dictionary, has at least 4 characters and can be found on the board.
      *
@@ -275,7 +324,8 @@ public class BoggleGame {
      * @param boggleDict A dictionary of legal words
      * @param boggleGrid A boggle grid, with a letter at each position on the grid
      */
-    private void findAllWords(Dictionary boggleDict, BoggleGrid boggleGrid) {
+
+    public void findAllWords(Dictionary boggleDict, BoggleGrid boggleGrid) {
         List<String> words = boggleDict.validWords();
 
         int numRows = boggleGrid.numRows();
@@ -372,54 +422,34 @@ public class BoggleGame {
         return false;
     }
 
-    /* 
-     * Gets words from the user.  As words are input, check to see that they are valid.
-     * If yes, add the word to the player's word list (in boggleStats) and increment
-     * the player's score (in boggleStats).
-     * End the turn once the user hits return (with no word).
-     *
-     * @param board The boggle board
-     * @param allWords A mutable list of all legal words that can be found, given the boggleGrid grid letters
-     */
-    private void humanMove(){
-        System.out.println("\nIt's your turn to find some words!\n");
-        String inPut;
+    public void shuffle() {
+        updateEditor(this.grid);
+        Dictionary boggleDict = new Dictionary("wordlist.txt");
 
-        while(true) {
-            //step 1. Print the board for the user, so they can scan it for words
-            System.out.println(this.grid.toString());
-            System.out.print("Enter a word or press the Enter key to end: ");
-//            if(button_click is true){
-//                shuffle;
-//                button_click = false;
-//            }
-            //step 2. Get a input (a word) from the user via the console
-            inPut = scanner.nextLine();
-            if(inPut == "") break; //end round if user inputs nothing
+        BoggleGrid new_grid = new BoggleGrid(this.grid.size);
+        new_grid.initalizeBoard(randomizeLetters(this.grid.size));
 
-            //step 3. Check to see if it is valid (note validity checks should be case-insensitive)
-            if (this.allWords.containsKey((inPut.toUpperCase()))) {
-                //step 4. If it's valid, update the player's word list and score (stored in boggleStats)
-                gameStats.addWord(inPut.toUpperCase(), BoggleStats.Player.Human);
-            } else {playInvalid();}
-        }
+        this.grid = new_grid;
+        this.grid.takeSnapshot();
     }
 
-    /* 
-     * Gets words from the computer.  The computer should find words that are
-     * both valid and not in the player's word list.  For each word that the computer
-     * finds, update the computer's word list and increment the
-     * computer's score (stored in boggleStats).
-     *
-     * @param allWords A mutable list of all legal words that can be found, given the boggleGrid grid letters
-     */
-    private void computerMove(){
-        Set<String> player_words = gameStats.getPlayerWords();
-
-        for (String word : this.allWords.keySet()) {
-            if (!player_words.contains(word))
-                gameStats.addWord(word, BoggleStats.Player.Computer);
-        }
+    public void undo() {
+        this.grid = this.editor.undo();
     }
+
+    public void playValid() {
+
+    }
+
+    public void playInvalid() {
+
+    }
+
+    public void updateEditor(BoggleGrid boggleGrid) {
+
+    }
+
+
+
 
 }

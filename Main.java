@@ -1,7 +1,5 @@
 package boggle;
 
-import boggle.BoggleGame;
-
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.AudioClip;
@@ -17,9 +15,9 @@ import java.util.*;
  */
 public class Main {
     /**
-    * Main method. 
-    * @param args command line arguments.
-    **/
+     * Main method.
+     * @param args command line arguments.
+     **/
     public static void main(String[] args) {
 //        String path;
 //        Platform.startup({
@@ -34,6 +32,7 @@ public class Main {
 
         BoggleGame b = new BoggleGame();
         b.giveInstructions();
+        b.setGamemode();
         b.playGame();
     }
 
