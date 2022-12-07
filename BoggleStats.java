@@ -92,13 +92,12 @@ public class BoggleStats {
      */
 
     public void changeState(){
-        this.pScore = this.state.point();
+        this.p1Score = this.state.point();
         this.state = new RegularState(this);
     }
 
     public void addWord(String word, Player player, String mode) {
         if (player == Player.Player1) {
-            playValid();
             if (!this.player1Words.contains(word)) {     // Make sure no duplicated word
                 playValid();
                 this.player1Words.add(word);
@@ -114,7 +113,7 @@ public class BoggleStats {
         }
         else {
             if (!this.player1Words.contains(word)) {
-                if(mode.contains("m"){playValid();}
+                if(mode.contains("m")){playValid();}
                 this.player2Words.add(word);
                 this.p2Score += 1 + word.length() - 4;
             } else if(mode.contains("m")){playInvalid();}
@@ -226,18 +225,11 @@ public class BoggleStats {
     /*
      * @return int The current Player 1 score
      */
-    public int getPlayer1Score() {
+    public int getScore() {
 
         return this.p1Score;
     }
 
-    /*
-     * @return int The current Player 2 score
-     */
-    public int getPlayer2Score() {
-
-        return this.p2Score;
-    }
 
     public void playValid(){
         File file = new File("CorrectSound(1).mp3");

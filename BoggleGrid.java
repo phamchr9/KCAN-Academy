@@ -115,9 +115,5 @@ public class BoggleGrid {
         }
     }
 
-
-
-    public void takeSnapshot() {
-    }
 }
 

@@ -31,8 +31,32 @@ public class SinglePlayer extends BoggleGame{
      */
     public void playRound(int size, String letters){
         //step 1. initialize the grid
-        BoggleGrid grid = new BoggleGrid(size);
+        this.grid = new BoggleGrid(size);
         grid.initalizeBoard(letters);
+
+        this.editor = new Editor(this.grid);
+        this.allWords = new HashMap<String, ArrayList<Position>>();
+        this.grid.takeSnapshot();
+        System.out.println(this.grid.toString());
+
+        boolean satisfied = false;
+
+        //checks if the input is valid
+        while(!satisfied){
+            System.out.println("Press[S] to shuffle or Press[U] to undo shuffle or Press[P] to start playing [S/U/P]");
+            String shuffle = scanner.nextLine().toUpperCase();
+            if(shuffle.equals("S")){
+                shuffle();
+                System.out.println(this.grid.toString());
+            } else if(shuffle.equals("P")) {
+                satisfied = true;
+            } else if(shuffle.equals("U")) {
+                undo();
+                System.out.println(this.grid.toString());
+            } else {
+                System.out.println("Invalid input, try again.");
+            }
+        }
 
         //step 2. initialize the dictionary of legal words
         Dictionary boggleDict = new Dictionary("wordlist.txt"); //you may have to change the path to the wordlist, depending on where you place it.
@@ -71,8 +95,8 @@ public class SinglePlayer extends BoggleGame{
             //step 3. Check to see if it is valid (note validity checks should be case-insensitive)
             if (this.allWords.containsKey((inPut.toUpperCase()))) {
                 //step 4. If it's valid, update the player's word list and score (stored in boggleStats)
-                gameStats.addWord(inPut.toUpperCase(), BoggleStats.Player.Player1);
-            }
+                gameStats.addWord(inPut.toUpperCase(), BoggleStats.Player.Player1, "s");
+            } else {playInvalid();}
         }
     }
 
@@ -88,7 +112,7 @@ public class SinglePlayer extends BoggleGame{
 
         for (String word : this.allWords.keySet()) {
             if (!player_words.contains(word))
-                gameStats.addWord(word, BoggleStats.Player.Player2);
+                gameStats.addWord(word, BoggleStats.Player.Player2, "s");
         }
     }
 }

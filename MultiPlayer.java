@@ -175,7 +175,7 @@ public class MultiPlayer extends BoggleGame{
             //step 3. Check to see if it is valid (note validity checks should be case-insensitive)
             if (this.allWords.containsKey((inPut.toUpperCase())) && !gameIsPaused) {
                 //step 4. If it's valid, update the player's word list and score (stored in boggleStats)
-                gameStats.addWord(inPut.toUpperCase(), BoggleStats.Player.Player1);
+                gameStats.addWord(inPut.toUpperCase(), BoggleStats.Player.Player1, "m");
             } else {
                 playInvalid();
             }
@@ -222,7 +222,7 @@ public class MultiPlayer extends BoggleGame{
             //step 3. Check to see if it is valid (note validity checks should be case-insensitive)
             if (this.allWords.containsKey((inPut.toUpperCase())) && !gameIsPaused) {
                 //step 4. If it's valid, update the player's word list and score (stored in boggleStats)
-                gameStats.addWord(inPut.toUpperCase(), BoggleStats.Player.Player2);
+                gameStats.addWord(inPut.toUpperCase(), BoggleStats.Player.Player2, "m");
             } else {
                 playInvalid();
             }

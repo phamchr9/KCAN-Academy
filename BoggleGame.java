@@ -72,11 +72,6 @@ public class BoggleGame {
      */
     private BoggleStats gameStats;
 
-    public Editor editor;
-
-    public Map<String, ArrayList<Position>> allWords;
-
-    public BoggleGrid grid;
 
 
     /**
@@ -420,38 +415,4 @@ public class BoggleGame {
 
         return false;
     }
-
-    // Shuffles bogglegrid by initilizing a new grid of the same size with new letters
-    
-    public void shuffle() {
-        updateEditor(this.grid);
-        Dictionary boggleDict = new Dictionary("wordlist.txt");
-
-        BoggleGrid new_grid = new BoggleGrid(this.grid.size);
-        new_grid.initalizeBoard(randomizeLetters(this.grid.size));
-
-        this.grid = new_grid;
-        this.grid.takeSnapshot();
-    }
-
-    public void undo() {
-        this.grid = this.editor.undo();
-    }
-
-    public void playValid() {
-
-
-    }
-
-    public void playInvalid() {
-
-    }
-
-    public void updateEditor(BoggleGrid boggleGrid) {
-
-    }
-
-
-
-
 }
