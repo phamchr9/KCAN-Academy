@@ -45,6 +45,16 @@ import java.io.IOException;
 import java.util.*;
 import java.awt.Rectangle;
 
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.application.Application;
+import javafx.scene.media.*;
+import java.io.File;
+import java.util.*;
+
 /**
  * This is the main program.
  */
@@ -70,12 +80,11 @@ public class GameViewer extends Application {
      */
     public static void main(String[] args) {
         b = new BoggleGame();
-//        GameViewer game = new GameViewer();
-
         b.giveInstructions();
+        b.setGamemode();
         b.playGame();
 
-        String l = b.boggleGrid.boardLetters;
+        String l = b.boardLetters;
         int a = b.allWords.size();
         String letters = "--letters=" + l;
         String totalWords = "--totalWords=" + Integer.toString(a);

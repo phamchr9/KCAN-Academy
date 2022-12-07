@@ -3,6 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="76c781f6-e58b-45dd-800f-1b35f5c7f987" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BoggleGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/BoggleGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameViewer.java" beforeDir="false" afterPath="$PROJECT_DIR$/GameViewer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MultiPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/MultiPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SinglePlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/SinglePlayer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +42,21 @@
     "project.structure.side.proportion": "0.2"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.boggle.Main">
+  <component name="RunManager" selected="Application.GameViewer">
+    <configuration name="GameViewer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="boggle.GameViewer" />
+      <module name="KCAN-Academy" />
+      <option name="VM_PARAMETERS" value="--module-path &quot;C:\Users\Kenaz Christian\OneDrive\Desktop\University\Courses\CSC207\chris536\openjfx-19_windows-x64_bin-sdk\javafx-sdk-19\lib&quot; --add-modules javafx.controls,javafx.fxml,javafx.media" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="boggle.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="corretto-18" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -78,9 +97,11 @@
     <list>
       <item itemvalue="Application.Main" />
       <item itemvalue="Application.boggle.Main" />
+      <item itemvalue="Application.GameViewer" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.GameViewer" />
         <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>

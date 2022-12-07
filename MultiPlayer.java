@@ -98,7 +98,7 @@ public class MultiPlayer extends BoggleGame{
 
         //step 1. initialize the grid
         this.grid = new BoggleGrid(size);
-        grid.initalizeBoard(letters);
+        this.grid.initalizeBoard(letters);
 
         this.editor = new Editor(this.grid);
         this.allWords = new HashMap<String, ArrayList<Position>>();

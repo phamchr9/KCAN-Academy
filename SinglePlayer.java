@@ -32,7 +32,7 @@ public class SinglePlayer extends BoggleGame{
     public void playRound(int size, String letters){
         //step 1. initialize the grid
         this.grid = new BoggleGrid(size);
-        grid.initalizeBoard(letters);
+        this.grid.initalizeBoard(letters);
 
         this.editor = new Editor(this.grid);
         this.allWords = new HashMap<String, ArrayList<Position>>();

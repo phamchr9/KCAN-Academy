@@ -21,7 +21,7 @@ public class BoggleGame {
     /**
      * stores a string representation of the board letters.
      */
-    private String boardLetters;
+    public String boardLetters;
 
     /**
      * stores the SinglePlayer object.
@@ -182,8 +182,13 @@ public class BoggleGame {
                 }
                 boardLetters = choiceLetters.toUpperCase();
             }
+            this.grid = new BoggleGrid(boardSize);
+            this.grid.initalizeBoard(boardLetters);
+            this.allWords = new HashMap<>();
+            Dictionary boggleDict = new Dictionary("wordlist.txt");
+            findAllWords(boggleDict, this.grid);
 
-            //starts the round
+            //starts the rounds
             if (choiceGamemode.equals("1")) {
                 this.player1Name = "Human";
                 this.player2Name = "Computer";
