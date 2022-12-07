@@ -1,7 +1,5 @@
 package boggle;
 
-
-
 /**
  * The BoggleGrid class for the first Assignment in CSC207, Fall 2022
  * The BoggleGrid represents the grid on which we play Boggle 
@@ -12,9 +10,10 @@ public class BoggleGrid {
      * size of grid
      */  
     public int size;
+
     /**
      * characters assigned to grid
-     */      
+     */
     private char[][] board;
     public String BoardLetters;
 
@@ -28,7 +27,7 @@ public class BoggleGrid {
         this.board = new char[size][size];
     }
 
-    /* 
+    /*
      * Assigns a letter in the string of letters to each grid position
      * Letters should be assigned left to right, top to bottom
      *
@@ -70,14 +69,14 @@ public class BoggleGrid {
         return this.size;
     }
 
-    /* 
+    /*
      * @return int the number of columns on the board (assumes square grid)
      */
     public int numCols() {
         return this.size;
     }
 
-    /* 
+    /*
      * @return char the character at a given grid position
      */
     public char getCharAt(int row, int col) {
@@ -118,5 +117,7 @@ public class BoggleGrid {
 
 
 
+    public void takeSnapshot() {
+    }
 }
 

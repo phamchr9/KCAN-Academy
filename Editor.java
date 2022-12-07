@@ -5,7 +5,6 @@ import java.util.EmptyStackException;
 import java.util.LinkedList;
 import java.util.Stack;
 
-
 public class Editor {
     public Stack<BoggleGrid.Memento> History;
     public BoggleGrid bogglegrid;
